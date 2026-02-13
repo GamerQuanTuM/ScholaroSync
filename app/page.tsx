@@ -2,7 +2,7 @@ import { getSession } from "../lib/session";
 import GradeConverter from "../components/GradeConverter";
 import AuthForm from "../components/AuthForm";
 import { LogOut, FileText } from "lucide-react";
-import { logout, getStudentProfile, getTranscriptById } from "@/lib/actions";
+import { logout, getStudentProfile, getTranscriptById } from "../lib/actions";
 import Link from "next/link";
 
 export const metadata = {

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, CheckCircle2, Trash2, Edit2, Loader2, ArrowRight } from "lucide-react";
-import { deleteTranscript } from "@/lib/actions";
+import { deleteTranscript } from "../lib/actions";
 
 interface Subject {
     id: string;

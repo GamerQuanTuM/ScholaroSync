@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useFormStatus } from "react-dom";
 import { AtSign, User, ShieldCheck, ArrowRight, BookOpen } from "lucide-react";
-import { login, register } from "@/lib/actions";
+import { login, register } from "../lib/actions";
 
 export default function AuthForm() {
     const [isLogin, setIsLogin] = useState(true);

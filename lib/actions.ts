@@ -1,8 +1,8 @@
 'use server'
 
-import { GradeEnum } from "@/lib/generated/prisma";
-import prisma from "@/lib/prisma";
-import { createSession, logout as logoutSession, getSession } from "@/lib/session";
+import { GradeEnum } from "../lib/generated/prisma";
+import prisma from "../lib/prisma";
+import { createSession, logout as logoutSession, getSession } from "../lib/session";
 import { redirect } from "next/navigation";
 
 // Define the shape of the data coming from the client

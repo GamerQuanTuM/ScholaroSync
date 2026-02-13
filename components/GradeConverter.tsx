@@ -7,10 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Plus, Trash2, Calculator, Info, RefreshCw, GraduationCap, Edit2, Download, Eye, X, CheckCircle2, FileText, LayoutGrid, Save
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { transcriptRecord, updateTranscript } from "@/lib/actions";
+import { cn } from "../lib/utils";
+import { transcriptRecord, updateTranscript } from "../lib/actions";
 
-import { SessionPayload } from "@/lib/session";
+import { SessionPayload } from "../lib/session";
 
 interface DBSubject {
     id: string;
