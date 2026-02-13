@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ScholaroSync 🎓
 
-## Getting Started
+ScholaroSync is a professional grade conversion and transcript management tool specifically designed for students of **Maulana Abul Kalam Azad University of Technology (MAKAUT)**, Batch 2017-2021. It facilitates the seamless transition of academic records from the MAKAUT 10-point CGPA system to the international 4.0 GPA standard used by **Scholaro** and other global evaluation services.
 
-First, run the development server:
+## 🚀 The Purpose
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+For many students applying to universities in the USA, Canada, and Europe, converting Indian university grades into a standard 4.0 scale is a critical step. ScholaroSync automates this process using the accurate mapping guidelines favored by international credential evaluation agencies, helping students visualize their academic standing globally and generate professional transcripts.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📊 Conversion Methodology
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+ScholaroSync uses a verified mapping scale tailored for the MAKAUT grading system. The conversion is based on individual letter grades obtained in each subject, rather than a direct linear conversion of the final CGPA, which ensures greater accuracy in the final GPA calculation.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Grade Mapping Table
 
-## Learn More
+| MAKAUT Grade | Status | 10.0 Scale Points | **Scholaro 4.0 Scale** |
+| :--- | :--- | :---: | :---: |
+| **O** (Outstanding) | Pass | 10 | **4.0** |
+| **E** (Excellent) | Pass | 9 | **4.0** |
+| **A** (Very Good) | Pass | 8 | **3.5** |
+| **B** (Good) | Pass | 7 | **3.0** |
+| **C** (Average) | Pass | 6 | **2.5** |
+| **D** (Below Average) | Pass | 5 | **2.0** |
+| **F** (Fail) | Fail | 2 | **0.0** |
 
-To learn more about Next.js, take a look at the following resources:
+### Calculation Logic
+The final GPA is calculated using the **Weighted Average** method:
+1. Each letter grade is converted to its 4.0 value.
+2. The value is multiplied by the credits assigned to that subject.
+3. The sum of these products is divided by the total number of credits attempted.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 📝 Step-by-Step Example
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Suppose a student has completed a semester with the following results:
 
-## Deploy on Vercel
+| Subject | Credits | MAKAUT Grade | Scholaro Points | Weighted Points (Credits × Points) |
+| :--- | :---: | :---: | :---: | :---: |
+| Data Structures | 4 | **O** | 4.0 | 16.0 |
+| Mathematics | 4 | **A** | 3.5 | 14.0 |
+| Economics | 2 | **B** | 3.0 | 6.0 |
+| **TOTAL** | **10** | - | - | **36.0** |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Calculation:**
+`Total Weighted Points (36.0)` / `Total Credits (10)` = **3.60 GPA**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ✨ Key Features
+
+- **Instant Conversion**: Real-time calculation of your 4.0 GPA as you add subjects.
+- **Professional PDF Export**: Generate a clean, official-looking transcript formatted for A4 printing, including an authorized signature line.
+- **Student Dashboard**: Save multiple transcripts to your account to track your academic progress over different semesters.
+- **Modern UI/UX**: Built with a sleek, dark-themed "Glassmorphism" design with smooth animations.
+- **Mobile Responsive**: Manage your grades on the go from any device.
+
+## 🛠️ Technical Stack
+
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Database**: [Prisma](https://www.prisma.io/) with PostgreSQL
+- **Styling**: Tailwind CSS 4.0
+- **Animations**: Framer Motion
+- **Notifications**: Sonner
+- **Icons**: Lucide React
+
+## 🛠️ Getting Started
+
+### Prerequisites
+- Node.js 20+
+- PostgreSQL database
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/GamerQuanTuM/ScholaroSync.git
+   cd scholaro-sync
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Environment Setup**
+   Create a `.env` file in the root directory:
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/scholaro_sync"
+   SESSION_SECRET="your_long_random_secret_string"
+   ```
+
+4. **Database Migration**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Run Development Server**
+   ```bash
+   pnpm dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) to see the app in action.
+
+---
+*Developed for MAKAUT Students. Disclaimer: This tool is for reference and unofficial transcript generation. Always verify with your institution for official credential evaluation.*
