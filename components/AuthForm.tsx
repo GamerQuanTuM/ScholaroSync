@@ -19,7 +19,10 @@ export default function AuthForm() {
             } else {
                 await register(formData);
             }
-        } catch (error) {
+        } catch (error: any) {
+            if (error.message === "NEXT_REDIRECT") {
+                throw error;
+            }
             console.error(error);
             const errorMessage = "Authentication failed. Please check your details.";
             toast.error(errorMessage);
