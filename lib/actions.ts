@@ -305,3 +305,27 @@ export async function getTranscriptById(transcriptId: string) {
     }
 }
 
+export async function getAllTranscriptsForDGPA() {
+    const session = await getSession();
+    if (!session || !session.userId) {
+        return [];
+    }
+
+    try {
+        const transcripts = await prisma.semester.findMany({
+            where: {
+                studentId: session.userId as string,
+            },
+            include: {
+                subjects: true,
+            },
+            orderBy: {
+                semester: 'asc',
+            },
+        });
+        return transcripts;
+    } catch (error) {
+        console.error("Failed to fetch transcripts for DGPA:", error);
+        return [];
+    }
+}

@@ -1,7 +1,7 @@
 import { getSession } from "../lib/session";
 import GradeConverter from "../components/GradeConverter";
 import AuthForm from "../components/AuthForm";
-import { LogOut, FileText } from "lucide-react";
+import { LogOut, FileText, BarChart3, BookOpen } from "lucide-react";
 import { logout, getStudentProfile, getTranscriptById } from "../lib/actions";
 import Link from "next/link";
 
@@ -39,6 +39,12 @@ export default async function Home({ searchParams }: Props) {
           <div className="flex items-center gap-6 text-sm font-medium text-zinc-400">
             {session && (
               <div className="flex items-center gap-4">
+                <Link href="/dgpa" className="flex items-center gap-2 hover:text-white transition-colors">
+                  <BarChart3 size={16} /> <span className="hidden sm:inline">DGPA</span>
+                </Link>
+                <Link href="/conversion" className="flex items-center gap-2 hover:text-white transition-colors">
+                  <BookOpen size={16} /> <span className="hidden sm:inline">Report</span>
+                </Link>
                 <Link href="/transcripts" className="flex items-center gap-2 hover:text-white transition-colors">
                   <FileText size={16} /> <span className="hidden sm:inline">Transcripts</span>
                 </Link>

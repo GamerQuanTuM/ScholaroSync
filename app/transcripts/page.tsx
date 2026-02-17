@@ -28,9 +28,14 @@ export default async function TranscriptsPage() {
             <div className="container mx-auto py-12 px-4 flex-1">
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-3xl font-bold tracking-tight text-white">My Transcripts</h1>
-                    <a href="/" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
-                        &larr; Back to Converter
-                    </a>
+                    <div className="flex items-center gap-4">
+                        <a href="/dgpa" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1.5">
+                            Calculate DGPA &rarr;
+                        </a>
+                        <a href="/" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+                            &larr; Back to Converter
+                        </a>
+                    </div>
                 </div>
 
                 <TranscriptsList transcripts={transcripts} />
