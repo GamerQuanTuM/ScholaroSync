@@ -22,6 +22,8 @@ ScholaroSync uses a verified mapping scale tailored for the MAKAUT grading syste
 | **D** (Below Average) | Pass | 5 | **2.0** |
 | **F** (Fail) | Fail | 2 | **0.0** |
 
+> **Note on Alignment:** This mapping perfectly aligns with the standard Scholaro 10-point scale conversion. For example, MAKAUT's **E (9 points)** maps to **4.0 (A+)**, **B (7 points)** maps to **3.0 (B+)**, and **D (5 points)** maps to **2.0 (C/P)** on the US scale. The grade points are mathematically identical.
+
 ### How the Conversion Works
 
 > **Key Principle:** The conversion is performed at the **individual subject grade level**, not by mathematically scaling the final CGPA or DGPA. Each subject's letter grade is independently mapped to its 4.0 equivalent, and all subsequent aggregations (SGPA, YGPA, DGPA) use the same MAKAUT formulas on the converted values.
