@@ -22,25 +22,108 @@ ScholaroSync uses a verified mapping scale tailored for the MAKAUT grading syste
 | **D** (Below Average) | Pass | 5 | **2.0** |
 | **F** (Fail) | Fail | 2 | **0.0** |
 
-### Calculation Logic
-The final GPA is calculated using the **Weighted Average** method:
-1. Each letter grade is converted to its 4.0 value.
-2. The value is multiplied by the credits assigned to that subject.
-3. The sum of these products is divided by the total number of credits attempted.
+### How the Conversion Works
 
-### 📝 Step-by-Step Example
+> **Key Principle:** The conversion is performed at the **individual subject grade level**, not by mathematically scaling the final CGPA or DGPA. Each subject's letter grade is independently mapped to its 4.0 equivalent, and all subsequent aggregations (SGPA, YGPA, DGPA) use the same MAKAUT formulas on the converted values.
 
-Suppose a student has completed a semester with the following results:
+The app runs **two independent, parallel pipelines** from the same subject grades:
 
-| Subject | Credits | MAKAUT Grade | Scholaro Points | Weighted Points (Credits × Points) |
-| :--- | :---: | :---: | :---: | :---: |
-| Data Structures | 4 | **O** | 4.0 | 16.0 |
-| Mathematics | 4 | **A** | 3.5 | 14.0 |
-| Economics | 2 | **B** | 3.0 | 6.0 |
-| **TOTAL** | **10** | - | - | **36.0** |
+```
+Subject grades + credits ──→ 10-scale GPs ──→ SGPA(10) ──→ YGPA(10) ──→ DGPA(10)
+                          └─→ 4.0-scale GPs ──→ SGPA(4.0) ──→ YGPA(4.0) ──→ DGPA(4.0)
+```
+
+The 10-scale and 4.0-scale results are **not derived from each other** — they are both computed from scratch using the same raw grades but different grade point maps.
+
+---
+
+### 1️⃣ SGPA (Semester GPA)
+
+For each semester, compute the Credit Index and divide by total credits:
+
+```
+Credit Index (CI) = Σ (Grade Point × Credits)  for each subject
+SGPA = CI / Total Credits
+```
+
+#### Worked Example — Semester with 3 subjects:
+
+| Subject | Credits | Grade | GP (10) | GP (4.0) | CI (10) | CI (4.0) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Data Structures | 4 | **O** | 10 | 4.0 | 40 | 16.0 |
+| Mathematics | 4 | **A** | 8 | 3.5 | 32 | 14.0 |
+| Economics | 2 | **B** | 7 | 3.0 | 14 | 6.0 |
+| **TOTAL** | **10** | | | | **86** | **36.0** |
+
+```
+SGPA(10)  = 86 / 10 = 8.60
+SGPA(4.0) = 36 / 10 = 3.60
+```
+
+> Both values come from the **same grades** — just different GP maps. Neither is derived from the other.
+
+---
+
+### 2️⃣ YGPA (Yearly GPA)
+
+Combine the two semesters of each academic year using **credit-weighted** aggregation (not a simple average of SGPAs):
+
+```
+YGPA = (CI_odd_semester + CI_even_semester) / (Credits_odd + Credits_even)
+```
+
+#### Worked Example — First Year results:
+
+| Semester | SGPA | Total Credits | Credit Index (CI) |
+| :--- | :---: | :---: | :---: |
+| Sem 1 | 6.20 | 10 | 62.0 |
+| Sem 2 | 6.50 | 14 | 91.0 |
+| **Year Total** | - | **24** | **153.0** |
 
 **Calculation:**
-`Total Weighted Points (36.0)` / `Total Credits (10)` = **3.60 GPA**
+`Total CI (153.0)` / `Total Credits (24)` = **6.375 YGPA**
+
+> **Note:** A simple average `(6.2 + 6.5) / 2` would be **6.35**. Because Sem 2 carried more credits (14 vs 10), it had a greater impact on the final YGPA. This same logic applies to both the 10-scale and 4.0-scale calculations.
+
+---
+
+### 3️⃣ DGPA (Degree GPA) — MAKAUT Weighted Formula
+
+The final DGPA uses the **official MAKAUT weighted formula** where later years carry more weight:
+
+| Year | Semesters | Weight | Rationale |
+| :--- | :--- | :---: | :--- |
+| 1st Year | Sem 1, Sem 2 | **×1.0** | Foundation year |
+| 2nd Year | Sem 3, Sem 4 | **×1.0** | Foundation year |
+| 3rd Year | Sem 5, Sem 6 | **×1.5** | Higher academic rigor |
+| 4th Year | Sem 7, Sem 8 | **×1.5** | Higher academic rigor |
+| | | **Σ = 5.0** | |
+
+```
+DGPA = (YGPA₁ × 1.0 + YGPA₂ × 1.0 + YGPA₃ × 1.5 + YGPA₄ × 1.5) / 5.0
+```
+
+This formula is applied **independently** on both scales:
+
+```
+DGPA(10)  = (YGPA₁(10)×1.0  + YGPA₂(10)×1.0  + YGPA₃(10)×1.5  + YGPA₄(10)×1.5)  / 5.0
+DGPA(4.0) = (YGPA₁(4.0)×1.0 + YGPA₂(4.0)×1.0 + YGPA₃(4.0)×1.5 + YGPA₄(4.0)×1.5) / 5.0
+```
+
+#### Worked Example — Full DGPA:
+
+| Year | YGPA (10) | YGPA (4.0) | Weight | Weighted (10) | Weighted (4.0) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| 1st | 7.40 | 2.95 | ×1.0 | 7.40 | 2.95 |
+| 2nd | 7.50 | 3.00 | ×1.0 | 7.50 | 3.00 |
+| 3rd | 7.70 | 3.10 | ×1.5 | 11.55 | 4.65 |
+| 4th | 7.80 | 3.15 | ×1.5 | 11.70 | 4.725 |
+| **Sum** | | | **5.0** | **38.15** | **15.325** |
+
+```
+DGPA(10)  = 38.15  / 5.0 = 7.63
+DGPA(4.0) = 15.325 / 5.0 = 3.07
+```
 
 ## ✨ Key Features
 

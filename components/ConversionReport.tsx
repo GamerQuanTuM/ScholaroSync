@@ -83,9 +83,6 @@ export default function ConversionReport() {
                             ))}
                         </tbody>
                     </table>
-                    <p className="text-[9px] text-zinc-500 mt-2 italic">
-                        Source: Scholaro.com — Evaluation of Foreign Educational Credentials for MAKAUT, West Bengal (Batch 2017-21).
-                    </p>
                 </div>
 
                 {/* ── SECTION 2: Per-Semester CGPA → 4.0 Conversion ── */}
