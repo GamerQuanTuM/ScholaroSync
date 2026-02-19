@@ -253,6 +253,46 @@ export default function ConversionReport() {
                             </div>
                         </div>
 
+                        {/* Worked Example */}
+                        <div className="mt-4" style={{ breakInside: "avoid" }}>
+                            <p className="font-bold text-[10px] text-black uppercase tracking-wider mb-2">Worked Example — Cumulative DGPA</p>
+                            <p className="text-zinc-600 mb-2">
+                                Suppose a student completes 8 semesters with the following totals:
+                            </p>
+                            <table className="w-full text-[10px] border-collapse">
+                                <thead>
+                                    <tr className="border-b-2 border-black text-[9px] font-bold uppercase tracking-wider">
+                                        <th className="text-left py-1.5">Semester</th>
+                                        <th className="text-center py-1.5 w-16">Credits</th>
+                                        <th className="text-center py-1.5 w-20">CI (10)</th>
+                                        <th className="text-center py-1.5 w-20">CI (4.0)</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-100">
+                                    <tr><td className="py-1 font-medium">1st Sem</td><td className="py-1 text-center font-mono">27</td><td className="py-1 text-center font-mono">197</td><td className="py-1 text-center font-mono">72.0</td></tr>
+                                    <tr><td className="py-1 font-medium">2nd Sem</td><td className="py-1 text-center font-mono">28</td><td className="py-1 text-center font-mono">182</td><td className="py-1 text-center font-mono">67.0</td></tr>
+                                    <tr><td className="py-1 font-medium">3rd Sem</td><td className="py-1 text-center font-mono">29</td><td className="py-1 text-center font-mono">218</td><td className="py-1 text-center font-mono">81.0</td></tr>
+                                    <tr><td className="py-1 font-medium">4th Sem</td><td className="py-1 text-center font-mono">26</td><td className="py-1 text-center font-mono">199</td><td className="py-1 text-center font-mono">73.0</td></tr>
+                                    <tr><td className="py-1 font-medium">5th Sem</td><td className="py-1 text-center font-mono">26</td><td className="py-1 text-center font-mono">198</td><td className="py-1 text-center font-mono">76.0</td></tr>
+                                    <tr><td className="py-1 font-medium">6th Sem</td><td className="py-1 text-center font-mono">25</td><td className="py-1 text-center font-mono">219</td><td className="py-1 text-center font-mono">90.0</td></tr>
+                                    <tr><td className="py-1 font-medium">7th Sem</td><td className="py-1 text-center font-mono">27</td><td className="py-1 text-center font-mono">261</td><td className="py-1 text-center font-mono">106.0</td></tr>
+                                    <tr><td className="py-1 font-medium">8th Sem</td><td className="py-1 text-center font-mono">21</td><td className="py-1 text-center font-mono">195</td><td className="py-1 text-center font-mono">81.0</td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr className="border-t-2 border-black bg-zinc-50 font-bold">
+                                        <td className="py-1.5 uppercase text-[9px] tracking-wider">Total</td>
+                                        <td className="py-1.5 text-center font-mono">209</td>
+                                        <td className="py-1.5 text-center font-mono">1669</td>
+                                        <td className="py-1.5 text-center font-mono">646.0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div className="bg-zinc-100 border border-zinc-200 rounded-lg p-3 font-mono text-[11px] text-center font-bold mt-2 space-y-1">
+                                <p>DGPA(10) = 1669 / 209 = <strong>7.986</strong></p>
+                                <p>DGPA(4.0) = 646 / 209 = <strong>3.091</strong></p>
+                            </div>
+                        </div>
+
                         {/* Key Principle */}
                         <div className="bg-zinc-100 border-2 border-black rounded-lg p-4 mt-4 space-y-2" style={{ breakInside: "avoid" }}>
                             <p className="font-bold text-[10px] text-black uppercase tracking-wider">Key Principle</p>
