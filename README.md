@@ -89,43 +89,38 @@ YGPA = (CI_odd_semester + CI_even_semester) / (Credits_odd + Credits_even)
 
 ---
 
-### 3️⃣ DGPA (Degree GPA) — MAKAUT Weighted Formula
+### 3️⃣ DGPA (Degree GPA) — Scholaro Cumulative GPA
 
-The final DGPA uses the **official MAKAUT weighted formula** where later years carry more weight:
-
-| Year | Semesters | Weight | Rationale |
-| :--- | :--- | :---: | :--- |
-| 1st Year | Sem 1, Sem 2 | **×1.0** | Foundation year |
-| 2nd Year | Sem 3, Sem 4 | **×1.0** | Foundation year |
-| 3rd Year | Sem 5, Sem 6 | **×1.5** | Higher academic rigor |
-| 4th Year | Sem 7, Sem 8 | **×1.5** | Higher academic rigor |
-| | | **Σ = 5.0** | |
+The final DGPA is a **simple credit-weighted cumulative average** across all subjects in all 8 semesters. This matches the Scholaro international standard:
 
 ```
-DGPA = (YGPA₁ × 1.0 + YGPA₂ × 1.0 + YGPA₃ × 1.5 + YGPA₄ × 1.5) / 5.0
+DGPA = Σ(Grade Point × Credits) / Total Credits
 ```
 
-This formula is applied **independently** on both scales:
+This is computed **independently** on both scales — the only difference is the grade point map used:
 
 ```
-DGPA(10)  = (YGPA₁(10)×1.0  + YGPA₂(10)×1.0  + YGPA₃(10)×1.5  + YGPA₄(10)×1.5)  / 5.0
-DGPA(4.0) = (YGPA₁(4.0)×1.0 + YGPA₂(4.0)×1.0 + YGPA₃(4.0)×1.5 + YGPA₄(4.0)×1.5) / 5.0
+DGPA(10)  = Σ(GP₁₀ × Credits) / Total Credits
+DGPA(4.0) = Σ(GP₄.₀ × Credits) / Total Credits
 ```
+
+Every credit across all semesters carries **equal weight** — there is no year-level weighting.
 
 #### Worked Example — Full DGPA:
 
-| Year | YGPA (10) | YGPA (4.0) | Weight | Weighted (10) | Weighted (4.0) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| 1st | 7.40 | 2.95 | ×1.0 | 7.40 | 2.95 |
-| 2nd | 7.50 | 3.00 | ×1.0 | 7.50 | 3.00 |
-| 3rd | 7.70 | 3.10 | ×1.5 | 11.55 | 4.65 |
-| 4th | 7.80 | 3.15 | ×1.5 | 11.70 | 4.725 |
-| **Sum** | | | **5.0** | **38.15** | **15.325** |
+Suppose across all 8 semesters:
+
+| | Total CI (sum of GP×Credits) | Total Credits |
+| :--- | :---: | :---: |
+| **10-scale** | 1585 | 209 |
+| **4.0-scale** | 646 | 209 |
 
 ```
-DGPA(10)  = 38.15  / 5.0 = 7.63
-DGPA(4.0) = 15.325 / 5.0 = 3.07
+DGPA(10)  = 1585 / 209 = 7.58
+DGPA(4.0) = 646  / 209 = 3.091
 ```
+
+> Both values come from the **same grades** — just different GP maps. The 4.0 DGPA is NOT derived from the 10-scale DGPA.
 
 ## ✨ Key Features
 

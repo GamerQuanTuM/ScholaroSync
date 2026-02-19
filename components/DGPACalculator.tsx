@@ -44,32 +44,7 @@ const GRADE_POINTS_4: Record<string, number> = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function convertDGPAto4Scale(dgpa10: number): number {
-    // Use linear interpolation between MAKAUT grade-point boundaries
-    // to map 10-scale DGPA → 4-scale, matching the Scholaro table.
-    const breakpoints: [number, number][] = [
-        [10, 4.0],
-        [9, 4.0],
-        [8, 3.5],
-        [7, 3.0],
-        [6, 2.5],
-        [5, 2.0],
-        [2, 0.0],
-    ];
 
-    if (dgpa10 >= 9) return 4.0;
-    if (dgpa10 <= 2) return 0.0;
-
-    for (let i = 0; i < breakpoints.length - 1; i++) {
-        const [upper10, upper4] = breakpoints[i];
-        const [lower10, lower4] = breakpoints[i + 1];
-        if (dgpa10 >= lower10 && dgpa10 <= upper10) {
-            const ratio = (dgpa10 - lower10) / (upper10 - lower10);
-            return lower4 + ratio * (upper4 - lower4);
-        }
-    }
-    return 0;
-}
 
 function formatOrdinal(val: string): string {
     if (!val) return "";
@@ -82,12 +57,12 @@ function formatOrdinal(val: string): string {
     return `${val}${suffix}`;
 }
 
-function getAcademicYear(semesterNum: string | null): string {
-    if (!semesterNum) return "Other";
-    const num = parseInt(semesterNum);
-    if (isNaN(num)) return semesterNum;
-    return String(Math.ceil(num / 2));
-}
+// function getAcademicYear(semesterNum: string | null): string {
+//     if (!semesterNum) return "Other";
+//     const num = parseInt(semesterNum);
+//     if (isNaN(num)) return semesterNum;
+//     return String(Math.ceil(num / 2));
+// }
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -186,46 +161,37 @@ export default function DGPACalculator({ transcripts, profile }: DGPACalculatorP
         return groups;
     }, [semesterDetails]);
 
-    // ─── DGPA Computation (Official MAKAUT Formula) ──────────────────────
-    // For 4 Year: DGPA = (YGPA1 + YGPA2 + 1.5×YGPA3 + 1.5×YGPA4) / 5
-    // For 3 Year: DGPA = (YGPA1 + YGPA2 + YGPA3) / 3
-    // For 2 Year: DGPA = (YGPA1 + YGPA2) / 2
-    // For 1 Year: DGPA = YGPA1
+    // ─── DGPA Computation (Scholaro Cumulative GPA) ──────────────────────
+    // Simple credit-weighted average across ALL subjects/semesters
+    // DGPA = Total Credit Index / Total Credits
     const { dgpa10, dgpa4, totalCreditsAll, totalSubjectsAll } = useMemo(() => {
         const totalCredits = semesterDetails.reduce((acc, s) => acc + s.totalCredits, 0);
         const totalSubjects = semesterDetails.reduce((acc, s) => acc + s.subjects.length, 0);
-        const n = yearGroups.length;
 
-        if (n === 0) return { dgpa10: 0, dgpa4: 0, totalCreditsAll: 0, totalSubjectsAll: 0 };
+        if (totalCredits === 0) return { dgpa10: 0, dgpa4: 0, totalCreditsAll: 0, totalSubjectsAll: 0 };
 
-        // MAKAUT weights: Year 1,2 = 1.0; Year 3+ = 1.5
-        // For 4-year: denominator = 1 + 1 + 1.5 + 1.5 = 5
-        // For 3-year: denominator = 1 + 1 + 1 = 3
-        // General: sum of weights
-        let weightedSum10 = 0;
-        let weightedSum4 = 0;
-        let denominator = 0;
+        // Sum Credit Index across all semesters
+        const totalCI10 = semesterDetails.reduce((acc, s) => {
+            return acc + s.subjects.reduce(
+                (a, sub) => a + (GRADE_POINTS_10[sub.grade] ?? 0) * sub.credits, 0
+            );
+        }, 0);
 
-        yearGroups.forEach((group, idx) => {
-            const yearNum = idx + 1; // 1-indexed year
-            const weight = (n >= 4 && yearNum >= 3) ? 1.5 : 1.0;
-            weightedSum10 += group.ygpa10 * weight;
-            weightedSum4 += group.ygpa4 * weight;
-            denominator += weight;
-        });
-
-        const d10 = denominator > 0 ? weightedSum10 / denominator : 0;
-        const d4 = denominator > 0 ? weightedSum4 / denominator : 0;
+        const totalCI4 = semesterDetails.reduce((acc, s) => {
+            return acc + s.subjects.reduce(
+                (a, sub) => a + (GRADE_POINTS_4[sub.grade] ?? 0) * sub.credits, 0
+            );
+        }, 0);
 
         return {
-            dgpa10: d10,
-            dgpa4: d4,
+            dgpa10: totalCI10 / totalCredits,
+            dgpa4: totalCI4 / totalCredits,
             totalCreditsAll: totalCredits,
             totalSubjectsAll: totalSubjects,
         };
-    }, [semesterDetails, yearGroups]);
+    }, [semesterDetails]);
 
-    // The 4-scale DGPA computed via MAKAUT weighted formula is the primary
+    // The 4-scale cumulative GPA (Scholaro method) is the primary value
     const finalDGPA4 = dgpa4;
 
     const handlePrint = () => {
@@ -458,11 +424,11 @@ export default function DGPACalculator({ transcripts, profile }: DGPACalculatorP
                             <span className="text-zinc-200 font-semibold">DGPA</span> for 4-year B.Tech:
                         </p>
                         <div className="bg-black/60 rounded-lg p-2.5 font-mono text-[11px] text-primary text-center border border-primary/10">
-                            DGPA = (YGPA₁ + YGPA₂ + 1.5×YGPA₃ + 1.5×YGPA₄) / 5
+                            DGPA = Σ(Grade Point × Credits) / Total Credits
                         </div>
                         <p className="text-xs text-zinc-400 leading-relaxed">
-                            The <span className="text-zinc-200 font-semibold">4.0 Scale</span> DGPA uses the same MAKAUT
-                            weighted formula applied to Scholaro-converted grade points.
+                            The <span className="text-zinc-200 font-semibold">4.0 Scale</span> DGPA is a simple
+                            credit-weighted cumulative GPA across all semesters, matching the Scholaro standard.
                         </p>
                     </div>
                 </div>
@@ -605,13 +571,11 @@ export default function DGPACalculator({ transcripts, profile }: DGPACalculatorP
                                                 </thead>
                                                 <tbody className="divide-y divide-zinc-100">
                                                     {yearGroups.map((group, gIdx) => {
-                                                        const weight = (yearGroups.length >= 4 && gIdx + 1 >= 3) ? 1.5 : 1.0;
                                                         return (
                                                             <>
                                                                 <tr key={`year-${group.year}`} className="bg-zinc-100">
                                                                     <td colSpan={6} className="py-2 px-2 font-bold text-[11px] uppercase tracking-wider text-black">
                                                                         {formatOrdinal(group.year)} Year
-                                                                        {yearGroups.length >= 4 && <span className="ml-2 text-[9px] text-zinc-500 normal-case">(weight: ×{weight})</span>}
                                                                     </td>
                                                                 </tr>
                                                                 {group.semesters.map((sem) => (
@@ -772,13 +736,11 @@ export default function DGPACalculator({ transcripts, profile }: DGPACalculatorP
                                 </thead>
                                 <tbody className="divide-y divide-zinc-100">
                                     {yearGroups.map((group, gIdx) => {
-                                        const weight = (yearGroups.length >= 4 && gIdx + 1 >= 3) ? 1.5 : 1.0;
                                         return (
                                             <>
                                                 <tr key={`print-year-${group.year}`} className="bg-zinc-100">
                                                     <td colSpan={6} className="py-1 px-2 font-bold text-[10px] uppercase tracking-wider text-black">
                                                         {formatOrdinal(group.year)} Year
-                                                        {yearGroups.length >= 4 && <span className="ml-2 text-[8px] text-zinc-500 normal-case">(weight: ×{weight})</span>}
                                                     </td>
                                                 </tr>
                                                 {group.semesters.map((sem) => (

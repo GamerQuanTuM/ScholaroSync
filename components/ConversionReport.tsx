@@ -204,25 +204,19 @@ export default function ConversionReport() {
                     </h2>
                     <div className="space-y-4 text-[10px] text-zinc-700 leading-relaxed">
                         <p>
-                            The Degree GPA (DGPA) combines all 8 semesters of the 4-year B.Tech programme using
-                            the official MAKAUT weighted formula. The same formula is applied independently to
-                            both the 10-point scale and the 4.0 scale to produce the final converted DGPA.
+                            The Degree GPA (DGPA) on the 4.0 scale is computed as a <strong>simple credit-weighted
+                                cumulative average</strong> across all subjects in all 8 semesters. This matches the
+                            Scholaro international standard for GPA calculation.
                         </p>
 
                         <div className="space-y-3">
                             <div className="flex gap-3 items-start">
                                 <span className="shrink-0 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5">1</span>
                                 <div>
-                                    <p className="font-bold text-black">Compute YGPA (Yearly GPA) for each year</p>
+                                    <p className="font-bold text-black">Map each subject grade to the 4.0 scale</p>
                                     <p className="text-zinc-600 mt-0.5">
-                                        Combine the two semesters in each academic year by summing their Credit Indices
-                                        and dividing by their combined total credits:
-                                    </p>
-                                    <div className="bg-zinc-100 border border-zinc-200 rounded-lg p-3 font-mono text-[11px] text-center font-bold mt-2">
-                                        YGPA = (CI<sub>odd sem</sub> + CI<sub>even sem</sub>) / (Credits<sub>odd</sub> + Credits<sub>even</sub>)
-                                    </div>
-                                    <p className="text-zinc-500 mt-1 text-[9px]">
-                                        This is done separately on both scales — YGPA(10) using 10-scale CIs, and YGPA(4.0) using 4.0-scale CIs.
+                                        Every subject across all 8 semesters has its MAKAUT letter grade independently
+                                        converted to a 4.0 grade point using the mapping in Section 1.
                                     </p>
                                 </div>
                             </div>
@@ -230,82 +224,33 @@ export default function ConversionReport() {
                             <div className="flex gap-3 items-start">
                                 <span className="shrink-0 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5">2</span>
                                 <div>
-                                    <p className="font-bold text-black">Apply the MAKAUT weighted formula for DGPA</p>
+                                    <p className="font-bold text-black">Compute total Credit Index across all semesters</p>
                                     <p className="text-zinc-600 mt-0.5">
-                                        As per the official MAKAUT regulation, Years 1 &amp; 2 carry a weight of <strong>1.0</strong>,
-                                        while Years 3 &amp; 4 carry a higher weight of <strong>1.5</strong> (reflecting increased academic rigor):
+                                        Multiply each subject&apos;s 4.0 grade point by its credit hours, then sum across
+                                        all subjects in all semesters:
                                     </p>
                                     <div className="bg-zinc-100 border border-zinc-200 rounded-lg p-3 font-mono text-[11px] text-center font-bold mt-2">
-                                        DGPA = (YGPA₁ × 1.0 + YGPA₂ × 1.0 + YGPA₃ × 1.5 + YGPA₄ × 1.5) / 5
+                                        Total CI = &Sigma;(GP<sub>4.0</sub> &times; Credits) for every subject
                                     </div>
-                                    <p className="text-zinc-500 mt-1 text-[9px]">
-                                        Denominator = 1.0 + 1.0 + 1.5 + 1.5 = 5.0
-                                    </p>
                                 </div>
                             </div>
 
                             <div className="flex gap-3 items-start">
                                 <span className="shrink-0 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5">3</span>
                                 <div>
-                                    <p className="font-bold text-black">Apply the same formula on the 4.0 scale</p>
+                                    <p className="font-bold text-black">Divide by total credits</p>
                                     <p className="text-zinc-600 mt-0.5">
-                                        The identical MAKAUT weighted formula is applied to the YGPA values computed from
-                                        4.0-scale Credit Indices. This ensures the conversion is done at the <em>subject grade level</em>,
-                                        not by mapping the final DGPA number directly:
+                                        The cumulative DGPA on the 4.0 scale is simply the total Credit Index
+                                        divided by the total number of credits attempted across all semesters:
                                     </p>
                                     <div className="bg-zinc-100 border border-zinc-200 rounded-lg p-3 font-mono text-[11px] text-center font-bold mt-2">
-                                        DGPA<sub>4.0</sub> = (YGPA₁<sub>4.0</sub> × 1.0 + YGPA₂<sub>4.0</sub> × 1.0 + YGPA₃<sub>4.0</sub> × 1.5 + YGPA₄<sub>4.0</sub> × 1.5) / 5
+                                        DGPA<sub>4.0</sub> = Total CI / Total Credits
                                     </div>
+                                    <p className="text-zinc-500 mt-1 text-[9px]">
+                                        This is the same method for both scales — only the grade point map differs.
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* Weight breakdown table */}
-                        <div style={{ breakInside: "avoid" }}>
-                            <p className="font-bold text-[10px] text-black uppercase tracking-wider mb-2 mt-4">Year Weight Summary</p>
-                            <table className="w-full text-[10px] border-collapse">
-                                <thead>
-                                    <tr className="border-b-2 border-black text-[9px] font-bold uppercase tracking-wider">
-                                        <th className="text-left py-2">Year</th>
-                                        <th className="text-left py-2">Semesters</th>
-                                        <th className="text-center py-2 w-20">Weight</th>
-                                        <th className="text-left py-2">Rationale</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-zinc-100">
-                                    <tr>
-                                        <td className="py-2 font-bold">1st Year</td>
-                                        <td className="py-2 font-mono text-zinc-600">Sem 1, Sem 2</td>
-                                        <td className="py-2 text-center font-mono font-bold">×1.0</td>
-                                        <td className="py-2 text-zinc-600">Foundation year</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 font-bold">2nd Year</td>
-                                        <td className="py-2 font-mono text-zinc-600">Sem 3, Sem 4</td>
-                                        <td className="py-2 text-center font-mono font-bold">×1.0</td>
-                                        <td className="py-2 text-zinc-600">Foundation year</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 font-bold">3rd Year</td>
-                                        <td className="py-2 font-mono text-zinc-600">Sem 5, Sem 6</td>
-                                        <td className="py-2 text-center font-mono font-bold">×1.5</td>
-                                        <td className="py-2 text-zinc-600">Higher academic rigor</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="py-2 font-bold">4th Year</td>
-                                        <td className="py-2 font-mono text-zinc-600">Sem 7, Sem 8</td>
-                                        <td className="py-2 text-center font-mono font-bold">×1.5</td>
-                                        <td className="py-2 text-zinc-600">Higher academic rigor</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr className="border-t-2 border-black bg-zinc-50">
-                                        <td colSpan={2} className="py-2 font-bold text-[9px] uppercase tracking-wider">Total (Denominator)</td>
-                                        <td className="py-2 text-center font-mono font-black">5.0</td>
-                                        <td className="py-2"></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
                         </div>
 
                         {/* Key Principle */}
@@ -314,9 +259,9 @@ export default function ConversionReport() {
                             <p className="text-[10px] text-zinc-700 leading-relaxed">
                                 The conversion from MAKAUT&apos;s 10-point system to the Scholaro 4.0 scale is performed at the
                                 <strong> individual subject grade level</strong>, not by mathematically scaling the final CGPA or DGPA.
-                                Each subject&apos;s letter grade is independently mapped to its 4.0 equivalent, and all subsequent
-                                aggregations (SGPA, YGPA, DGPA) use the same formulas on the converted values.
-                                This ensures full transparency and auditability of the final 4.0 GPA.
+                                Each subject&apos;s letter grade is independently mapped to its 4.0 equivalent. The final DGPA
+                                is a simple credit-weighted average — every credit across all 8 semesters carries equal weight.
+                                This ensures full transparency and matches the Scholaro international standard.
                             </p>
                         </div>
                     </div>
